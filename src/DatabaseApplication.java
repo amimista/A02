@@ -34,7 +34,11 @@ public class DatabaseApplication {
     private JScrollPane resultingTableScrollPane;
     private JTable addTable;
     private JButton addSubmitChanges;
+    private JPanel table4Panel;
+    private JScrollPane table4ScrollPane;
+    private JTable table4;
 
+    //    = = = = USER NEEDED FIELDS = = = =
     private static DatabaseApplication app;
     private static DatabaseOperations dbOperations;
     private static String[][] defaultTable = {
@@ -51,21 +55,31 @@ public class DatabaseApplication {
     private static String[][] tableData;
     private static String currentTableName;
     private Map<JTable, String> tableStringMap;
-    private JTable[] tables = {table1, table2, table3, resultingTable};
 
 
+    /**
+     * Mostly auto-generated event-listeners on what happens in the app.
+     */
     public DatabaseApplication() {
-        tableStringMap = new HashMap<>();
-        updateTableDataModel(table1, "Student"); // update the first table to make it show up on launch
-        addModifyPanel.setVisible(false); // don't wanna see those yet
+        tableStringMap = new HashMap<>(); // linking the JTable to the SQL table name
+        tableStringMap.put(table1, "natdex");
+        tableStringMap.put(table2, "natdex"); // CHANGEME
+        tableStringMap.put(table3, "natdex"); // CHANGEME
+        tableStringMap.put(table4, "natdex"); // CHANGEME
+
+        dbOperations = new DatabaseOperations("pokemon", true);
+        updateTableDataModel(table1, tableStringMap.get(table1)); // update the first table to make it show up on launch
+
+//        Don't want to see modify panels at launch.
+        addModifyPanel.setVisible(false);
         removeModifyPanel.setVisible(false);
         updateModifyPanel.setVisible(false);
-        for (JTable table: tables) {
+
+//        Makes sure the main-view tables are not user-editable.
+        JTable[] tables = {table1, table2, table3, table4, resultingTable};
+        for (JTable table : tables) {
             table.setEnabled(false);
         }
-        tableStringMap.put(table1, "Student");
-        tableStringMap.put(table2, "College");
-        tableStringMap.put(table3, "StudentCollege");
 
 
         tableTabbedPane.addChangeListener(new ChangeListener() {
@@ -73,16 +87,19 @@ public class DatabaseApplication {
             public void stateChanged(ChangeEvent e) {
                 switch (tableTabbedPane.getSelectedIndex()) {
                     case 0:
-                        updateTableDataModel(table1, tableStringMap.get(table1)); // TODO: 3/1/2023
+                        updateTableDataModel(table1, tableStringMap.get(table1));
                         break;
                     case 1:
-                        updateTableDataModel(table2, tableStringMap.get(table2)); // TODO: 3/1/2023
+                        updateTableDataModel(table2, tableStringMap.get(table2));
                         break;
                     case 2:
-                        updateTableDataModel(table3, tableStringMap.get(table3)); // TODO: 3/1/2023
+                        updateTableDataModel(table3, tableStringMap.get(table3));
                         break;
+                    case 3:
+                        updateTableDataModel(table4, tableStringMap.get(table4));
                     default:
                         resultingTable.setModel(new DefaultTableModel(defaultTable, new String[1]));
+//                        For whatever reason, Swing doesn't like when System.out.print happens. Kinda just breaks.
 //                        System.out.println("There was an issue with getting what to do at tab index " + tableTabbedPane.getSelectedIndex() + ".");
                         break;
                 }
@@ -92,58 +109,61 @@ public class DatabaseApplication {
         submitModifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (tableModifyComboBox.getSelectedIndex() != 0) {
-                    switch (modifyOperationComboBox.getSelectedIndex()) {
-                        case 1:
-                            addModifyPanel.setVisible(true);
-                            removeModifyPanel.setVisible(false);
-                            updateModifyPanel.setVisible(false);
-                            break;
-                        case 2:
-                            addModifyPanel.setVisible(false);
-                            removeModifyPanel.setVisible(true);
-                            updateModifyPanel.setVisible(false);
-                            break;
-                        case 3:
-                            addModifyPanel.setVisible(false);
-                            removeModifyPanel.setVisible(false);
-                            updateModifyPanel.setVisible(true);
-                            break;
+                Object[] addColumnHeaders;
+                switch (modifyOperationComboBox.getSelectedIndex()) {
+                    case 0:
+                        addModifyPanel.setVisible(false);
+                        removeModifyPanel.setVisible(false);
+                        updateModifyPanel.setVisible(false);
+                    case 1:
+                        addModifyPanel.setVisible(true);
+                        removeModifyPanel.setVisible(false);
+                        updateModifyPanel.setVisible(false);
+                        break;
+                    case 2:
+                        addModifyPanel.setVisible(false);
+                        removeModifyPanel.setVisible(true);
+                        updateModifyPanel.setVisible(false);
+                        break;
+                    case 3:
+                        addModifyPanel.setVisible(false);
+                        removeModifyPanel.setVisible(false);
+                        updateModifyPanel.setVisible(true);
+                        break;
+                }
+//                Enhanced Switch-case statement I guess. Doesn't need those break; statements anymore.
+//                Gets what table is requested to change. changes Add and Update panels.
+                switch (tableModifyComboBox.getSelectedIndex()) {
+                    case 1 -> {
+                        addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table1));
+                        addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
                     }
-
-                    Object[] addColumnHeaders;
-                    switch (tableModifyComboBox.getSelectedIndex()) {
-                        case 1:
-                            addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table1));
-                            addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
-                            break;
-                        case 2:
-                            addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table2));
-                            addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
-                            break;
-                        case 3:
-                            addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table3));
-                            addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
-                            break;
-
+                    case 2 -> {
+                        addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table2));
+                        addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
                     }
-
-                } else {
-                    addModifyPanel.setVisible(false);
-                    removeModifyPanel.setVisible(false);
-                    updateModifyPanel.setVisible(false);
+                    case 3 -> {
+                        addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table3));
+                        addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
+                    }
+                    case 4 -> {
+                        addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table4));
+                        addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
+                    }
                 }
             }
+
         });
         addSubmitChanges.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(Arrays.deepToString(getTableData(addTable)));
+                System.out.println(Arrays.deepToString(getTableData(addTable))); // TODO: 3/4/2023
             }
         });
     }
 
     public static void main(String[] args) {
+//        Makes the application dark-mode.
         try {
             UIManager.setLookAndFeel( new FlatMacDarkLaf() );
             UIManager.put("Table.showHorizontalLines", true);
@@ -152,7 +172,6 @@ public class DatabaseApplication {
             System.err.println( "Failed to initialize LaF" );
         }
 
-        dbOperations = new DatabaseOperations("FirstDatabase", true);
         app = new DatabaseApplication();
 
 //        System.out.println(Arrays.toString(dbOperations.getColumnHeaders("Student")))
@@ -176,6 +195,12 @@ public class DatabaseApplication {
         targetTable.setModel(new DefaultTableModel(tableData, tableColHeaders));
     }
 
+    /**
+     * Asks Swing what data is in the table. Mostly used in Adding and Updating rows in the Application
+     *
+     * @param table of desired data. Implies that target table is user-editable.
+     * @return of strings because dynamically changing data stored is hard.
+     */
     public static String[][] getTableData(JTable table) {
         String[][] out;
         out = new String[table.getRowCount()][table.getColumnCount()];

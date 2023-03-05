@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Thu Mar 02 18:39:31 MST 2023:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance a816c00e-0186-a51f-d1aa-00000ec9acc0 
-on database directory C:\Users\Marcus\IdeaProjects\A02\FirstDatabase with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1d44bcfa 
+Sat Mar 04 17:08:01 HST 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.1.3 - (1557168): instance a816c00e-0186-afbd-8e15-00000ec92440 
+on database directory C:\Users\Marcus\IdeaProjects\A02\pokemon with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@1d44bcfa 
 Loaded from file:/C:/Users/Marcus/IdeaProjects/A02/lib/derby.jar
 java.vendor=Eclipse Adoptium
 java.runtime.version=17.0.6+10

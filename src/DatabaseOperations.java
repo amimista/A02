@@ -1,5 +1,10 @@
 import java.sql.*;
 
+/**
+ * Eliminates the need for all the try-catch jargon that would otherwise fill up many lines of code in the Applications' main method.
+ *
+ * @author Marcus Walker
+ */
 public class DatabaseOperations {
     private String database_url;
 
@@ -17,6 +22,12 @@ public class DatabaseOperations {
         }
     }
 
+    /**
+     * Simply just makes it where you don't need to include the try-catch with resources. Equivalent to statement.executeQuery();
+     *
+     * @param sql SQL text to run
+     * @return 2D String Array of what is queried.
+     */
     public String[][] executeQuery(String sql) {
         String[][] resultArr = null;
 
@@ -53,6 +64,11 @@ public class DatabaseOperations {
         return resultArr;
     }
 
+    /**
+     * Simply just makes it where you don't need to include the try-catch with resources. Equivalent to statement.execute();
+     *
+     * @param sql SQL text to run
+     */
     public void execute(String sql) {
         try (Connection connection = DriverManager.getConnection(database_url);
              Statement statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY)) {
@@ -65,11 +81,12 @@ public class DatabaseOperations {
         }
     }
 
-    public String[][] executeAndQuery(String sql) {
-        execute(sql);
-        return executeQuery(sql);
-    }
-
+    /**
+     * Gets the table column headers for the requested table.
+     *
+     * @param tableName desired table to get column headers from. Must be a SQL table name
+     * @return Array of column headers. Always uppercase.
+     */
     public String[] getColumnHeaders(String tableName) {
         String[] out = null;
         try (Connection connection = DriverManager.getConnection(database_url);
@@ -80,7 +97,7 @@ public class DatabaseOperations {
 
             out = new String[meta.getColumnCount()];
             for (int i = 1; i <= out.length; i++) {
-                out[i-1] = meta.getColumnLabel(i);
+                out[i - 1] = meta.getColumnLabel(i);
             }
 
         } catch (SQLException sqlException) {
@@ -90,6 +107,12 @@ public class DatabaseOperations {
         return out;
     }
 
+    /**
+     * Gets table data from requested table.
+     *
+     * @param tableName SQL table name
+     * @return 2D array of what is queried.
+     */
     public String[][] getRowData(String tableName) {
         String[][] out = null;
 
@@ -110,7 +133,9 @@ public class DatabaseOperations {
             resultSet.next();
             for (int i = 0; resultSet.next(); i++) {
                 for (int j = 1; j <= meta.getColumnCount(); j++) {
-                    out[i][j - 1] = resultSet.getObject(j).toString();
+                    if (resultSet.getObject(j) != null) {
+                        out[i][j - 1] = resultSet.getObject(j).toString();
+                    }
                 }
             }
 
@@ -122,4 +147,20 @@ public class DatabaseOperations {
         return out;
     }
 
+    public static void main(String[] args) {
+        DatabaseOperations db_opp = new DatabaseOperations("pokemon", true);
+        db_opp.execute("DROP TABLE NATDEX");
+        db_opp.execute(NatDexSQL.createTable());
+        db_opp.execute(NatDexSQL.fillTable());
+
+//        db_opp.execute("DROP TABLE Type");
+//        db_opp.execute(TypeSQL.createTable());
+//        db_opp.execute(TypeSQL.fillTable());
+
+//        db_opp.execute(EvMethod.createTable());
+//        db_opp.execute(EvMethod.fillTable());
+//
+//        db_opp.execute(Evolution.createTable());
+//        db_opp.execute(Evolution.fillTable());
+    }
 }

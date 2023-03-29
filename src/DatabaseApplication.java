@@ -60,14 +60,14 @@ public class DatabaseApplication {
     /**
      * Mostly auto-generated event-listeners on what happens in the app.
      */
-    public DatabaseApplication() {
+    public DatabaseApplication(boolean create) {
         tableStringMap = new HashMap<>(); // linking the JTable to the SQL table name
         tableStringMap.put(table1, "natdex");
-        tableStringMap.put(table2, "natdex"); // CHANGEME
-        tableStringMap.put(table3, "natdex"); // CHANGEME
-        tableStringMap.put(table4, "natdex"); // CHANGEME
+        tableStringMap.put(table2, "type");
+        tableStringMap.put(table3, "evmethod");
+        tableStringMap.put(table4, "evolution");
 
-        dbOperations = new DatabaseOperations("pokemon", true);
+        dbOperations = new DatabaseOperations("pokemon", create);
         updateTableDataModel(table1, tableStringMap.get(table1)); // update the first table to make it show up on launch
 
 //        Don't want to see modify panels at launch.
@@ -131,8 +131,8 @@ public class DatabaseApplication {
                         updateModifyPanel.setVisible(true);
                         break;
                 }
-//                Enhanced Switch-case statement I guess. Doesn't need those break; statements anymore.
 //                Gets what table is requested to change. changes Add and Update panels.
+                int tableToModify = tableModifyComboBox.getSelectedIndex();
                 switch (tableModifyComboBox.getSelectedIndex()) {
                     case 1 -> {
                         addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table1));
@@ -155,32 +155,45 @@ public class DatabaseApplication {
 
         });
         addSubmitChanges.addActionListener(new ActionListener() {
+            /**
+             * When the Submit button is pressed, create a 2D String array of the resulting record data. Execute a SQL statement on the NatDex table.
+             *
+             * @author Josh Ashton
+             * @param e the event to be processed
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(Arrays.deepToString(getTableData(addTable))); // TODO: 3/4/2023
+                String[][] s = new String[1][addTable.getColumnCount()];
+                for (int i = 0; i < s.length; i++) {
+                    for (int j = 0; j < s[i].length; j++) {
+                        s[i][j] = addTable.getValueAt(i, j).toString();
+                    }
+                }
+                dbOperations.execute(NatDexSQL.addData(Integer.parseInt(s[0][0]), s[0][1], Double.parseDouble(s[0][2]), Double.parseDouble(s[0][3]), s[0][4], s[0][5]));
+                updateTableDataModel(table1, "natdex");
             }
         });
     }
 
-    public static void main(String[] args) {
-//        Makes the application dark-mode.
-        try {
-            UIManager.setLookAndFeel( new FlatMacDarkLaf() );
-            UIManager.put("Table.showHorizontalLines", true);
-            UIManager.put("Table.showVerticalLines", true);
-        } catch( Exception ex ) {
-            System.err.println( "Failed to initialize LaF" );
-        }
+    /**
+     * Method should be called to drop all tables, create all tables, and fill all tables with pre-determined records.
+     */
+    private void dropCreateFillTables() {
+//        db_opp.execute(NatDexSQL.dropTable());
+//        db_opp.execute(NatDexSQL.createTable());
+//        db_opp.execute(NatDexSQL.fillTable());
 
-        app = new DatabaseApplication();
+//        db_opp.execute(TypeSQL.dropTable());
+//        db_opp.execute(TypeSQL.createTable());
+//        db_opp.execute(TypeSQL.fillTable());
 
-//        System.out.println(Arrays.toString(dbOperations.getColumnHeaders("Student")))
+//        db_opp.execute(EvMethod.dropTable());
+//        db_opp.execute(EvMethod.createTable());
+//        db_opp.execute(EvMethod.fillTable());
 
-        JFrame frame = new JFrame("Database Application");
-        frame.setContentPane(app.rootPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+//        db_opp.execute(Evolution.dropTable());
+//        db_opp.execute(Evolution.createTable());
+//        db_opp.execute(Evolution.fillTable());
     }
 
     /**
@@ -207,17 +220,33 @@ public class DatabaseApplication {
 
         for (int i = 0; i < out.length; i++) {
             for (int j = 0; j < out[0].length; j++) {
-                out[i][j] = table.getValueAt(i, j).toString();
+                if(table.getValueAt(i, j) == null) {
+                    out[i][j] = null; // Detects last col as a null value even when data is entered.
+                } else {
+                    out[i][j] = table.getValueAt(i, j).toString();
+                }
             }
         }
 
         return out;
     }
 
-    private static void print2DArray(Object[][] arr) {
-        System.out.println("==============ARRAY PRINT==============");
-        for (int i = 0; i < arr.length; i++) {
-            System.out.println(Arrays.toString(arr[i]));
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel( new FlatMacDarkLaf() );
+            UIManager.put("Table.showHorizontalLines", true);
+            UIManager.put("Table.showVerticalLines", true);
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
         }
+
+        // CREATE = TRUE means all tables are dropped, created, and filled.
+        app = new DatabaseApplication(false);
+
+        JFrame frame = new JFrame("Database Application");
+            frame.setContentPane(app.rootPanel);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setVisible(true);
     }
 }

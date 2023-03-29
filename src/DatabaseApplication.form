@@ -256,7 +256,7 @@
                     <properties>
                       <borderPainted value="true"/>
                       <inheritsPopupMenu value="true"/>
-                      <text value="Comit Changes"/>
+                      <text value="Commit Changes"/>
                     </properties>
                   </component>
                   <hspacer id="d0e90">

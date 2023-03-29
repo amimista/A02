@@ -23,7 +23,7 @@ public class NatDexSQL {
     /**
      * <p>Generates a SQL statement to fill the NatDex table with data entries.</p>
      *
-     * @return a series of SQL INSERT statements.
+     * @return a SQL INSERT statement.
      */
     public static String fillTable() {
         return "INSERT INTO NatDex(DexID,Pokemon,Mass,Height,Type_I,Type_II) VALUES " +
@@ -187,6 +187,17 @@ public class NatDexSQL {
      */
     public static String dropTable() {
         return ("DROP TABLE NatDex");
+    }
+
+
+    /**
+     * <p>Generates a SQL INSERT statement to add a new Pokemon to the National Pokedex.</p>
+     *
+     * @return a SQL INSERT statement.
+     */
+    public static String addData(int dexID, String name, double mass, double height, String type, String type2) {
+        return "INSERT INTO NatDex(DexID,Pokemon,Mass,Height,Type_I,Type_II) VALUES " +
+                "(" + dexID + ",'" + name + "'," + mass + "," + height + ",'" + type + "','" + type2 + "')"; // TODO: Need to implement.
     }
 
     /**

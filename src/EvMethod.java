@@ -11,8 +11,8 @@ public class EvMethod {
      */
     public static String createTable() {
         return ("CREATE TABLE EvMethod (" +
-                "EvMethodID int not null primary key GENERATED,\n" +
-                "EvMethod char(255))");
+                "EvMethodID int not null primary key,\n" +
+                "EvMethod varchar(255))");
     }
 
     /**
@@ -21,7 +21,12 @@ public class EvMethod {
      * @return a SQL INSERT statement
      */
     public static String fillTable() {
-        return null; // TODO
+        return ("INSERT INTO EvMethod(EvMethodID,EvMethod) VALUES " +
+                "(1, 'Level Up'), " +
+                "(2,'Thunderstone'), " +
+                "(3,'Water stone'), " +
+                "(4,'Firestone'), " +
+                "(5,'Friendship')");
     }
 
     /**

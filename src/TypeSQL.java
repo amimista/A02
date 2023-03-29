@@ -21,7 +21,7 @@ public class TypeSQL {
      * @return a SQL INSERT statement
      */
     public static String fillTable() {
-        return ("INSERT INTO Type VALUES (" +
+        return ("INSERT INTO Type(TypeID,Type) VALUES " +
                 "(1, 'Normal'), " +
                 "(2,'Fire'), " +
                 "(3,'Water'), " +
@@ -39,7 +39,7 @@ public class TypeSQL {
                 "(15,'Dark'), " +
                 "(16,'Dragon'), " +
                 "(17,'Steel'), " +
-                "(18,'Fairy'))");
+                "(18,'Fairy')");
     }
 
     /**

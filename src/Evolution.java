@@ -11,11 +11,11 @@ public class Evolution {
      */
     public static String createTable() {
         return ("CREATE TABLE Evolution (" +
-                "EvolutionID int not null primary key GENERATED,\n" +
-                "DexID int not null key,\n" +
+                "EvolutionID int not null primary key,\n" +
+                "DexID int not null,\n" +
                 "PrevID int,\n" +
                 "NextID int,\n" +
-                "MethodID int key)");
+                "MethodID int not null)");
     }
 
     /**
@@ -24,7 +24,10 @@ public class Evolution {
      * @return a SQL INSERT statement
      */
     public static String fillTable() {
-        return null; // TODO
+        return "INSERT INTO Evolution(EvolutionID,DexID,PrevID,NextID,MethodID) VALUES " +
+                "(1,1,null,2,1),\n" +
+                "(2,2,1,3,1),\n" +
+                "(3,3,2,null,1)";
     }
 
     /**
@@ -33,7 +36,7 @@ public class Evolution {
      * @return a SQL DROP statement
      */
     public static String dropTable() {
-        return ("DROP TABLE Evolutions;");
+        return ("DROP TABLE Evolution");
     }
 
     /**

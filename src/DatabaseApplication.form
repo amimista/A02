@@ -34,7 +34,7 @@
               <grid id="526b" binding="table1Panel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <tabbedpane title="Table 1"/>
+                  <tabbedpane title="National Dex"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -62,7 +62,7 @@
               <grid id="11bd2" binding="table2Panel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <tabbedpane title="Table 2"/>
+                  <tabbedpane title="Type"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -88,7 +88,7 @@
               <grid id="d4782" binding="table3Panel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <tabbedpane title="Table 3"/>
+                  <tabbedpane title="Evolution Methods"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -115,7 +115,7 @@
               <grid id="267f7" binding="table4Panel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <tabbedpane title="Table 4"/>
+                  <tabbedpane title="Evolutions"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -141,7 +141,7 @@
               <grid id="7a21f" binding="resultingTablePanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <tabbedpane title="Resulting Table"/>
+                  <tabbedpane title="Test Table"/>
                 </constraints>
                 <properties>
                   <enabled value="false"/>
@@ -208,10 +208,10 @@
                 <properties>
                   <model>
                     <item value="Choose Option"/>
-                    <item value="Table 1"/>
-                    <item value="Table 2"/>
-                    <item value="Table 3"/>
-                    <item value="Table 4"/>
+                    <item value="National Dex"/>
+                    <item value="Type"/>
+                    <item value="Evolution Methods"/>
+                    <item value="Evolutions (unfinished)"/>
                   </model>
                 </properties>
               </component>

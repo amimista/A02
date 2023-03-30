@@ -8,6 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 
+/**
+ * This is the main functionality that connects to <a href="DatabaseApplication.form">the application</a> and <i>makes</i>
+ * it a database application
+ *
+ * @author Marcus W, Josh A
+ */
 public class DatabaseApplication {
     private JTabbedPane tableTabbedPane;
     private JPanel table1Panel;
@@ -54,9 +60,12 @@ public class DatabaseApplication {
             {"here"},
             {"man"}
     };
+
+    // ------------------------------------
+    // MAIN TABLE DATA THROUGH ENTIRE APP
+    // ------------------------------------
     private static String[] tableColHeaders;
     private static String[][] tableData;
-    private static String currentTableName;
     private Map<JTable, String> tableStringMap;
 
 
@@ -70,8 +79,8 @@ public class DatabaseApplication {
         tableStringMap.put(table3, "evmethod");
         tableStringMap.put(table4, "evolution");
 
-        dbOperations = new DatabaseOperations("pokemon", create);
-        if(create) dropCreateFillTables();
+        dbOperations = new DatabaseOperations("pokemon", create); //accessing main database for the app
+        if (create) dropCreateFillTables(); // changes not saved after app is relaunced
         updateTableDataModel(table1, tableStringMap.get(table1)); // update the first table to make it show up on launch
 
 //        Don't want to see modify panels at launch.
@@ -85,8 +94,13 @@ public class DatabaseApplication {
             table.setEnabled(false);
         }
 
-
         tableTabbedPane.addChangeListener(new ChangeListener() {
+            /**
+             * When the tab changes the table data is reassigned to what the SQL database has
+             *
+             * @param e a ChangeEvent object
+             * @author Marcus W
+             */
             @Override
             public void stateChanged(ChangeEvent e) {
                 switch (tableTabbedPane.getSelectedIndex()) {
@@ -111,6 +125,12 @@ public class DatabaseApplication {
         });
 
         submitModifyButton.addActionListener(new ActionListener() {
+            /**
+             * Changes what panel to show based on what modifier is selected if "Add" or "Update" is selected, it's update
+             * it's modify table to what table is targeted
+             *
+             * @author Marcus
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 Object[] addColumnHeaders = new Object[0];
@@ -156,6 +176,7 @@ public class DatabaseApplication {
             }
 
         });
+
         addSubmitChanges.addActionListener(new ActionListener() {
             /**
              * When the Submit button is pressed, create a 2D String array of the resulting record data. Execute a SQL statement on the NatDex table.
@@ -232,7 +253,6 @@ public class DatabaseApplication {
     public static void updateTableDataModel(JTable targetTable, String tableName) {
         tableColHeaders = dbOperations.getColumnHeaders(tableName);
         tableData = dbOperations.getRowData(tableName);
-        currentTableName = tableName;
         targetTable.setModel(new DefaultTableModel(tableData, tableColHeaders));
     }
 
@@ -260,21 +280,23 @@ public class DatabaseApplication {
     }
 
     public static void main(String[] args) {
+
+        // changes the look and feel to not look like some 80-year-old guy made our app.
         try {
-            UIManager.setLookAndFeel( new FlatMacDarkLaf() );
+            UIManager.setLookAndFeel(new FlatMacDarkLaf());
             UIManager.put("Table.showHorizontalLines", true);
             UIManager.put("Table.showVerticalLines", true);
-        } catch( Exception ex ) {
-            System.err.println( "Failed to initialize LaF" );
+        } catch (Exception ex) {
+            System.err.println("Failed to initialize LaF");
         }
 
         // CREATE = TRUE means all tables are dropped, created, and filled.
         app = new DatabaseApplication(true);
 
         JFrame frame = new JFrame("Database Application");
-            frame.setContentPane(app.rootPanel);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.pack();
-            frame.setVisible(true);
+        frame.setContentPane(app.rootPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
     }
 }

@@ -37,6 +37,9 @@ public class DatabaseApplication {
     private JPanel table4Panel;
     private JScrollPane table4ScrollPane;
     private JTable table4;
+    private JButton removeSubmitButton;
+    private JTable updateTable;
+    private JButton updateSubmitChanges;
 
     //    = = = = USER NEEDED FIELDS = = = =
     private static DatabaseApplication app;
@@ -109,7 +112,7 @@ public class DatabaseApplication {
         submitModifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Object[] addColumnHeaders;
+                Object[] addColumnHeaders = new Object[0];
                 switch (modifyOperationComboBox.getSelectedIndex()) {
                     case 0:
                         addModifyPanel.setVisible(false);
@@ -136,21 +139,19 @@ public class DatabaseApplication {
                 switch (tableModifyComboBox.getSelectedIndex()) {
                     case 1 -> {
                         addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table1));
-                        addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
                     }
                     case 2 -> {
                         addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table2));
-                        addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
                     }
                     case 3 -> {
                         addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table3));
-                        addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
                     }
                     case 4 -> {
                         addColumnHeaders = dbOperations.getColumnHeaders(tableStringMap.get(table4));
-                        addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
                     }
                 }
+                addTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
+                updateTable.setModel(new DefaultTableModel(new Object[1][addColumnHeaders.length], addColumnHeaders));
             }
 
         });
@@ -171,6 +172,20 @@ public class DatabaseApplication {
                 }
                 dbOperations.execute(NatDexSQL.addData(Integer.parseInt(s[0][0]), s[0][1], Double.parseDouble(s[0][2]), Double.parseDouble(s[0][3]), s[0][4], s[0][5]));
                 updateTableDataModel(table1, "natdex");
+            }
+        });
+        removeSubmitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO: 3/29/2023  
+            }
+        });
+
+
+        updateSubmitChanges.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO: 3/29/2023
             }
         });
     }

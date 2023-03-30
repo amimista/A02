@@ -201,6 +201,18 @@ public class NatDexSQL {
     }
 
     /**
+     * <p>Generates a SQL UPDATE statement to edit an existing Pokemon in the National Pokedex.</p>
+     *
+     * @return a SQL UPDATE statement.
+     */
+    public static String updateData(int dexID, String name, double mass, double height, String type, String type2) {
+        return "UPDATE NatDex\n" +
+                "SET Pokemon =\'" + name + "\', Mass=" + mass + ", Height=" + height + ", " +
+                "Type_I=\'" + type + "\', Type_II=\'" + type2 + "\'\n" +
+                "WHERE DexID = " + dexID;
+    }
+
+    /**
      * <p>Generates a SQL statement to select all data from the NatDex table.</p>
      *
      * @return a SQL SELECT statement

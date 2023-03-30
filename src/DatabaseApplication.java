@@ -71,6 +71,7 @@ public class DatabaseApplication {
         tableStringMap.put(table4, "evolution");
 
         dbOperations = new DatabaseOperations("pokemon", create);
+        if(create) dropCreateFillTables();
         updateTableDataModel(table1, tableStringMap.get(table1)); // update the first table to make it show up on launch
 
 //        Don't want to see modify panels at launch.
@@ -175,9 +176,14 @@ public class DatabaseApplication {
             }
         });
         removeSubmitButton.addActionListener(new ActionListener() {
+            /**
+             * When the submit button is pressed, read the text in the text field and parse the NatDexID. Execute a SQL DELETE statement.
+             * @param e the event to be processed
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: 3/29/2023  
+                dbOperations.execute(NatDexSQL.deleteData(Integer.parseInt(IDTextField.getText())));
+                updateTableDataModel(table1, "natdex");
             }
         });
 
@@ -185,7 +191,14 @@ public class DatabaseApplication {
         updateSubmitChanges.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: 3/29/2023
+                String[][] s = new String[1][updateTable.getColumnCount()];
+                for (int i = 0; i < s.length; i++) {
+                    for (int j = 0; j < s[i].length; j++) {
+                        s[i][j] = updateTable.getValueAt(i, j).toString();
+                    }
+                }
+                dbOperations.execute(NatDexSQL.updateData(Integer.parseInt(s[0][0]), s[0][1], Double.parseDouble(s[0][2]), Double.parseDouble(s[0][3]), s[0][4], s[0][5]));
+                updateTableDataModel(table1, "natdex");
             }
         });
     }
@@ -194,21 +207,21 @@ public class DatabaseApplication {
      * Method should be called to drop all tables, create all tables, and fill all tables with pre-determined records.
      */
     private void dropCreateFillTables() {
-//        db_opp.execute(NatDexSQL.dropTable());
-//        db_opp.execute(NatDexSQL.createTable());
-//        db_opp.execute(NatDexSQL.fillTable());
+        dbOperations.execute(NatDexSQL.dropTable());
+        dbOperations.execute(NatDexSQL.createTable());
+        dbOperations.execute(NatDexSQL.fillTable());
 
-//        db_opp.execute(TypeSQL.dropTable());
-//        db_opp.execute(TypeSQL.createTable());
-//        db_opp.execute(TypeSQL.fillTable());
+        dbOperations.execute(TypeSQL.dropTable());
+        dbOperations.execute(TypeSQL.createTable());
+        dbOperations.execute(TypeSQL.fillTable());
 
-//        db_opp.execute(EvMethod.dropTable());
-//        db_opp.execute(EvMethod.createTable());
-//        db_opp.execute(EvMethod.fillTable());
+        dbOperations.execute(EvMethod.dropTable());
+        dbOperations.execute(EvMethod.createTable());
+        dbOperations.execute(EvMethod.fillTable());
 
-//        db_opp.execute(Evolution.dropTable());
-//        db_opp.execute(Evolution.createTable());
-//        db_opp.execute(Evolution.fillTable());
+        dbOperations.execute(Evolution.dropTable());
+        dbOperations.execute(Evolution.createTable());
+        dbOperations.execute(Evolution.fillTable());
     }
 
     /**
@@ -256,7 +269,7 @@ public class DatabaseApplication {
         }
 
         // CREATE = TRUE means all tables are dropped, created, and filled.
-        app = new DatabaseApplication(false);
+        app = new DatabaseApplication(true);
 
         JFrame frame = new JFrame("Database Application");
             frame.setContentPane(app.rootPanel);
